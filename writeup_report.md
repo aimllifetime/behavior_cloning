@@ -42,18 +42,7 @@ python drive.py model.h5
 
 The model.py file contains the code for training and saving the convolution neural network. It also accepts a command line argument to take trained model from privious run. In this way, we can continously train neural network with newly captured data. User can define how many epochs in each run. Also user can have a way to reduce the repetitive image with zero measurement by defining a percentage. The file shows the pipeline I used for training and validating the model, and it contains comments to explain how the code works
 
-usage: model.py [-h] -d DIR [-m MD5] [-p PERCENTAGE] [-e EPOCH]
-
-optional arguments:
-  -h, --help            show this help message and exit
-  -d DIR, --dir DIR     IMG dir where data is collected: "dir1;dir2;dir3"
-  -m MD5, --md5 MD5     Previously trained model is used. if this is blank,
-                        training starts from stratch
-  -p PERCENTAGE, --percentage PERCENTAGE
-                        percentage of repeative image that has measurement of
-                        0
-  -e EPOCH, --epoch EPOCH
-                        number of epochs to run
+![command](./jpegs/commandline.png)
                         
 ## Examples ##:
    start a fresh training without loading any h5. three new captured data sets are in ./data, ./revers, and ./my_data
