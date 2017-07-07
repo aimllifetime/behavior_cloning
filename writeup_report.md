@@ -28,9 +28,9 @@ Here I will consider the [rubric points](https://review.udacity.com/#!/rubrics/4
 
 My project includes the following files:
 * model.py containing the script to create and train the model
-* drive.py for driving the car in autonomous mode
+* drive.py for driving the car in autonomous mode. did not change from original version.
 * model.h5 containing a trained convolution neural network 
-* writeup_report.md or writeup_report.pdf summarizing the results
+* writeup_report.md summarizing the results
 
 #### 2. Submission includes functional code
 Using the Udacity provided simulator and my drive.py file, the car can be driven autonomously around the track by executing 
@@ -40,15 +40,32 @@ python drive.py model.h5
 
 #### 3. Submission code is usable and readable
 
-The model.py file contains the code for training and saving the convolution neural network. The file shows the pipeline I used for training and validating the model, and it contains comments to explain how the code works.
+The model.py file contains the code for training and saving the convolution neural network. It also accepts a command line argument to take trained model from privious run. In this way, we can continously train neural network with newly captured data. User can define how many epochs in each run. Also user can have a way to reduce the repetitive image with zero measurement by defining a percentage. The file shows the pipeline I used for training and validating the model, and it contains comments to explain how the code works.
+
+example:
+python model.py -d "./data;./revers;./my_data"   <= start a fresh training without loading any h5. three new captured data set
+python model.py -d "./data" -m model.h5   <= load previously trained model.h5 and train with ./data
+python model.py -d "./data" -m model.h5 -p 0.3 -e 50 <= only use 30 percent of images with zero measurement. run epoch of 50
 
 ### Model Architecture and Training Strategy
 
 #### 1. An appropriate model architecture has been employed
 
-My model consists of a convolution neural network with 3x3 filter sizes and depths between 32 and 128 (model.py lines 18-24) 
+using Nvida covnet architecture primarily but with some dropouts. The input image is normalized with lambda layer in input layer(code line 189) The model includes RELU layers to introduce nonlinearity
 
-The model includes RELU layers to introduce nonlinearity (code line 20), and the data is normalized in the model using a Keras lambda layer (code line 18). 
+    ** First layer **: using lambda to normalize the image.
+    second layer: cropping the upper half image so only majority of road is only presented.
+    third layer: convolutional with 24 filters and filter 5x5, stride (2,2), activation of relu.
+    fourth layer: convolutional with 36 filters and filter 5x5, stride (2,2), activation of relu.
+    fifth layer: convolutional with 48 filters and filter 5x5, stride (2,2), activation of relu.
+    Dropout probability 0.3
+    sixth layer: convolutional with 64 filters and filter 5x5, stride (1,1), activation of relu.
+    seventh layer: same as sixth layer.
+    eighth layer: flatten layer
+    dropout probability 0.3
+    ninth layer: densely connect layer of 100
+    tenth layer: densely connect layer of 50
+    last layer: is output layer with one node.
 
 #### 2. Attempts to reduce overfitting in the model
 
