@@ -43,8 +43,8 @@ python drive.py model.h5
 The model.py file contains the code for training and saving the convolution neural network. It also accepts a command line argument to take trained model from privious run. In this way, we can continously train neural network with newly captured data. User can define how many epochs in each run. Also user can have a way to reduce the repetitive image with zero measurement by defining a percentage. The file shows the pipeline I used for training and validating the model, and it contains comments to explain how the code works
 
 ![command](./jpegs/commandline.png)
-                        
-## Examples ##:
+
+Examples 
    start a fresh training without loading any h5. three new captured data sets are in ./data, ./revers, and ./my_data
 
       python model.py -d "./data;./revers;./my_data"
@@ -63,19 +63,21 @@ The model.py file contains the code for training and saving the convolution neur
 
 using Nvida covnet architecture primarily but with some dropouts. The input image is normalized with lambda layer in input layer(code line 189) The model includes RELU layers to introduce nonlinearity
 
-    First layer:  using lambda to normalize the image.
-    second layer: cropping the upper half image so only majority of road is only presented.
-    third layer:  convolutional with 24 filters and filter 5x5, stride (2,2), activation of relu.
-    fourth layer: convolutional with 36 filters and filter 5x5, stride (2,2), activation of relu.
-    fifth layer:  convolutional with 48 filters and filter 5x5, stride (2,2), activation of relu.
-    Dropout probability 0.3
-    sixth layer:  convolutional with 64 filters and filter 5x5, stride (1,1), activation of relu.
-    seventh layer: same as sixth layer.
-    eighth layer: flatten layer
-    dropout probability 0.3
-    ninth layer:  densely connect layer of 100
-    tenth layer:  densely connect layer of 50
-    last layer:   is output layer with one node.
+|Codeline   | Model Layer            | Description    |
+|:----- |:-----------------|:---------------|
+|189 | First layer | using lambda to normalize the image |
+|190 | second layer| cropping the upper half image so only majority of road is only presented. |
+|191 | third layer | convolutional with 24 filters and filter 5x5, stride (2,2), activation of relu |
+|192 | fourth layer| convolutional with 36 filters and filter 5x5, stride (2,2), activation of relu |
+|194 | fifth layer | convolutional with 48 filters and filter 5x5, stride (2,2), activation of relu |
+|195 |             | Dropout probability 0.3 |
+|196 | sixth layer | convolutional with 64 filters and filter 5x5, stride (1,1), activation of relu |
+|197 | seventh layer| same as sixth layer |
+|198 | eighth layer| flatten layer |
+|199 |             | dropout probability 0.3 |
+|200 | ninth layer | densely connect layer of 100 |
+|202 | tenth layer | densely connect layer of 50 |
+|203 | last layer  | is output layer with one node. |
 
 #### 2. Attempts to reduce overfitting in the model
 
