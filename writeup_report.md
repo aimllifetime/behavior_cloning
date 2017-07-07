@@ -40,16 +40,32 @@ python drive.py model.h5
 
 #### 3. Submission code is usable and readable
 
-The model.py file contains the code for training and saving the convolution neural network. It also accepts a command line argument to take trained model from privious run. In this way, we can continously train neural network with newly captured data. User can define how many epochs in each run. Also user can have a way to reduce the repetitive image with zero measurement by defining a percentage. The file shows the pipeline I used for training and validating the model, and it contains comments to explain how the code works.
+The model.py file contains the code for training and saving the convolution neural network. It also accepts a command line argument to take trained model from privious run. In this way, we can continously train neural network with newly captured data. User can define how many epochs in each run. Also user can have a way to reduce the repetitive image with zero measurement by defining a percentage. The file shows the pipeline I used for training and validating the model, and it contains comments to explain how the code works
 
-Examples:
-   start a fresh training without loading any h5. three new captured data set
+usage: model.py [-h] -d DIR [-m MD5] [-p PERCENTAGE] [-e EPOCH]
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -d DIR, --dir DIR     IMG dir where data is collected: "dir1;dir2;dir3"
+  -m MD5, --md5 MD5     Previously trained model is used. if this is blank,
+                        training starts from stratch
+  -p PERCENTAGE, --percentage PERCENTAGE
+                        percentage of repeative image that has measurement of
+                        0
+  -e EPOCH, --epoch EPOCH
+                        number of epochs to run
+                        
+## Examples ##:
+   start a fresh training without loading any h5. three new captured data sets are in ./data, ./revers, and ./my_data
+
       python model.py -d "./data;./revers;./my_data"
 
    load previously trained model.h5 and train with ./data
-      python model.py -d "./data" -m model.h5 
+
+      python model.py -d "./data" -m model.h5
 
    only use 30 percent of images with zero measurement. run epoch of 50
+
       python model.py -d "./data" -m model.h5 -p 0.3 -e 50
 
 ### Model Architecture and Training Strategy
@@ -58,19 +74,19 @@ Examples:
 
 using Nvida covnet architecture primarily but with some dropouts. The input image is normalized with lambda layer in input layer(code line 189) The model includes RELU layers to introduce nonlinearity
 
-    ** First layer **: using lambda to normalize the image.
+    First layer:  using lambda to normalize the image.
     second layer: cropping the upper half image so only majority of road is only presented.
-    third layer: convolutional with 24 filters and filter 5x5, stride (2,2), activation of relu.
+    third layer:  convolutional with 24 filters and filter 5x5, stride (2,2), activation of relu.
     fourth layer: convolutional with 36 filters and filter 5x5, stride (2,2), activation of relu.
-    fifth layer: convolutional with 48 filters and filter 5x5, stride (2,2), activation of relu.
+    fifth layer:  convolutional with 48 filters and filter 5x5, stride (2,2), activation of relu.
     Dropout probability 0.3
-    sixth layer: convolutional with 64 filters and filter 5x5, stride (1,1), activation of relu.
+    sixth layer:  convolutional with 64 filters and filter 5x5, stride (1,1), activation of relu.
     seventh layer: same as sixth layer.
     eighth layer: flatten layer
     dropout probability 0.3
-    ninth layer: densely connect layer of 100
-    tenth layer: densely connect layer of 50
-    last layer: is output layer with one node.
+    ninth layer:  densely connect layer of 100
+    tenth layer:  densely connect layer of 50
+    last layer:   is output layer with one node.
 
 #### 2. Attempts to reduce overfitting in the model
 
