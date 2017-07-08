@@ -42,20 +42,9 @@ python drive.py model.h5
 
 The model.py file contains the code for training and saving the convolution neural network. It also accepts a command line argument to take trained model from privious run. In this way, we can continously train neural network with newly captured data. User can define how many epochs in each run. Also user can have a way to reduce the repetitive image with zero measurement by defining a percentage. The file shows the pipeline I used for training and validating the model, and it contains comments to explain how the code works
 
-usage: model.py [-h] -d DIR [-m MD5] [-p PERCENTAGE] [-e EPOCH]
+![command](./jpegs/commandline.png)
 
-optional arguments:
-  -h, --help            show this help message and exit
-  -d DIR, --dir DIR     IMG dir where data is collected: "dir1;dir2;dir3"
-  -m MD5, --md5 MD5     Previously trained model is used. if this is blank,
-                        training starts from stratch
-  -p PERCENTAGE, --percentage PERCENTAGE
-                        percentage of repeative image that has measurement of
-                        0
-  -e EPOCH, --epoch EPOCH
-                        number of epochs to run
-                        
-## Examples ##:
+Examples 
    start a fresh training without loading any h5. three new captured data sets are in ./data, ./revers, and ./my_data
 
       python model.py -d "./data;./revers;./my_data"
@@ -74,33 +63,34 @@ optional arguments:
 
 using Nvida covnet architecture primarily but with some dropouts. The input image is normalized with lambda layer in input layer(code line 189) The model includes RELU layers to introduce nonlinearity
 
-    First layer:  using lambda to normalize the image.
-    second layer: cropping the upper half image so only majority of road is only presented.
-    third layer:  convolutional with 24 filters and filter 5x5, stride (2,2), activation of relu.
-    fourth layer: convolutional with 36 filters and filter 5x5, stride (2,2), activation of relu.
-    fifth layer:  convolutional with 48 filters and filter 5x5, stride (2,2), activation of relu.
-    Dropout probability 0.3
-    sixth layer:  convolutional with 64 filters and filter 5x5, stride (1,1), activation of relu.
-    seventh layer: same as sixth layer.
-    eighth layer: flatten layer
-    dropout probability 0.3
-    ninth layer:  densely connect layer of 100
-    tenth layer:  densely connect layer of 50
-    last layer:   is output layer with one node.
+| Description    |
+|:---------------|
+| convolutional with 24 filters and filter 5x5, stride (2,2), activation of relu |
+| convolutional with 36 filters and filter 5x5, stride (2,2), activation of relu |
+| convolutional with 48 filters and filter 5x5, stride (2,2), activation of relu |
+| Dropout probability 0.3 |
+| convolutional with 64 filters and filter 5x5, stride (1,1), activation of relu |
+| convolutional with 64 filters and filter 5x5, stride (1,1), activation of relu|
+| flatten layer |
+| densely connect layer of 100 |
+| densely connect layer of 50 |
+| is output layer with one node. |
 
 #### 2. Attempts to reduce overfitting in the model
 
-The model contains dropout layers in order to reduce overfitting (model.py lines 21). 
+The model contains dropout layers in order to reduce overfitting (model.py lines 195 and line 199). 
 
-The model was trained and validated on different data sets to ensure that the model was not overfitting (code line 10-16). The model was tested by running it through the simulator and ensuring that the vehicle could stay on the track.
+The model was trained and validated on different data sets to ensure that the model was not overfitting. How to collect or generate augumented data set will be explained later. The model was tested by running it through the simulator and ensuring that the vehicle could stay on the track.
 
 #### 3. Model parameter tuning
 
-The model used an adam optimizer, so the learning rate was not tuned manually (model.py line 25).
+The model used an adam optimizer, so the learning rate was not tuned manually (model.py line 216).
+
+model.compile(loss='mse', optimizer='adam')
 
 #### 4. Appropriate training data
 
-Training data was chosen to keep the vehicle driving on the road. I used a combination of center lane driving, recovering from the left and right sides of the road ... 
+Training data was chosen to keep the vehicle driving on the road with multiple laps i.e. clockwise, counter clockwise and focused sharp turn after bridges. Each type of those training data was chosen carefully to keep in in center of road with smooth steering.
 
 For details about how I created the training data, see the next section. 
 
@@ -108,48 +98,63 @@ For details about how I created the training data, see the next section.
 
 #### 1. Solution Design Approach
 
-The overall strategy for deriving a model architecture was to ...
+The overall strategy for deriving a model architecture was to use Nvidia Convnet and modify it to avoid overfitting.
 
-My first step was to use a convolution neural network model similar to the ... I thought this model might be appropriate because ...
+My first step is to build the whole thing with simple network, i.e. one Neuron and try out the image preprocessing, save and load the model.h5. Once the simple network works even though it did not drive on center of lane, it gives all necessory components and flexibility to debug. 
 
-In order to gauge how well the model was working, I split my image and steering angle data into a training and validation set. I found that my first model had a low mean squared error on the training set but a high mean squared error on the validation set. This implied that the model was overfitting. 
+Then take look at the appropriate neural network such as Nvidia Convnet. I thought this model might be appropriate because it was demonstrated nicely by Nvidia published here: https://devblogs.nvidia.com/parallelforall/deep-learning-self-driving-cars/
 
-To combat the overfitting, I modified the model so that ...
+In order to gauge how well the model was working, I split my image and steering angle data into a training(80%) and validation set(20%).  
 
-Then I ... 
+To combat the overfitting, I modified the model to add lamdba normalization layer(code ), the dropout layer at linecode at 195 and 199. Also did cropping image to focus the image information only on the road.
 
-The final step was to run the simulator to see how well the car was driving around track one. There were a few spots where the vehicle fell off the track... to improve the driving behavior in these cases, I ....
+The final step was to run the simulator to see how well the car was driving around track one. There were a few spots where the vehicle fell off the track i.e. few big turns:
+
+[todo] to add images:
+
+to improve the driving behavior in these cases, I added the reverse driving lap to capture the driving data.
 
 At the end of the process, the vehicle is able to drive autonomously around the track without leaving the road.
 
-####2. Final Model Architecture
+#### 2. Final Model Architecture
 
-The final model architecture (model.py lines 18-24) consisted of a convolution neural network with the following layers and layer sizes ...
+The final model architecture (model.py lines 171-204) consisted of a convolution neural network with the following layers and layer sizes ...
 
-Here is a visualization of the architecture (note: visualizing the architecture is optional according to the project rubric)
+|Codeline   | Model Layer            | Description    |
+|:----- |:-----------------|:---------------|
+|189 | First layer | using lambda to normalize the image |
+|190 | second layer| cropping the upper half image so only majority of road is only presented. |
+|191 | third layer | convolutional with 24 filters and filter 5x5, stride (2,2), activation of relu |
+|192 | fourth layer| convolutional with 36 filters and filter 5x5, stride (2,2), activation of relu |
+|194 | fifth layer | convolutional with 48 filters and filter 5x5, stride (2,2), activation of relu |
+|195 |             | Dropout probability 0.3 |
+|196 | sixth layer | convolutional with 64 filters and filter 5x5, stride (1,1), activation of relu |
+|197 | seventh layer| same as sixth layer |
+|198 | eighth layer| flatten layer |
+|199 |             | dropout probability 0.3 |
+|200 | ninth layer | densely connect layer of 100 |
+|202 | tenth layer | densely connect layer of 50 |
+|203 | last layer  | is output layer with one node. |
 
-![alt text][image1]
+
 
 #### 3. Creation of the Training Set & Training Process
 
-To capture good driving behavior, I first recorded two laps on track one using center lane driving. Here is an example image of center lane driving:
+To capture good driving behavior, I tried multiple times to make sure I can steer the car on the center road with smooth steering. When my mouse moving is much smooth, then I recorded couple of laps that seems good at turns. One out of them is picked for training purpose. Here is one example of counter clock wise driving:
 
 ![alt text][image2]
 
-I then recorded the vehicle recovering from the left side and right sides of the road back to center so that the vehicle would learn to .... These images show what a recovery looks like starting from ... :
+I then recorded the vehicle in clock wise driving which is reverse direction compared to the default driving direction. Similarily, I did multiple driving and recorded multiple training data. Then I picked one for the training purpose with smoothest steering. Here is clock wise driving.
 
 ![alt text][image3]
-![alt text][image4]
-![alt text][image5]
 
-Then I repeated this process on track two in order to get more data points.
+Often I found the model gets off track on sharp turn or the road side does not have clear line. I captured multiple data set only relates to those failing turn and training them.
 
-To augment the data sat, I also flipped images and angles thinking that this would ... For example, here is an image that has then been flipped:
+To augment the data sat, I also flipped images and angles thinking that this would help generalize the model. For example, here is an image that has then been flipped:
 
 ![alt text][image6]
 ![alt text][image7]
 
-Etc ....
 
 After the collection process, I had X number of data points. I then preprocessed this data by ...
 
