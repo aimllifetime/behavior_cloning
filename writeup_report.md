@@ -154,6 +154,7 @@ Often I found the model gets off track on sharp turn or the road side does not h
 To augment the data sat, I also flipped images and angles thinking that this would help generalize the model. For example, here is an image that has then been flipped:
 
 ![alt text](./jpegs/center_2017_06_26_18_41_27_087_flipped.jpg)
+
 ![alt text](./jpegs/center_2017_06_24_12_27_38_238_flipped.jpg)
 
 
@@ -162,4 +163,4 @@ After the collection process, I had X number of data points. I then preprocessed
 
 I finally randomly shuffled the data set and put Y% of the data into a validation set. 
 
-I used this training data for training the model. The validation set helped determine if the model was over or under fitting. The ideal number of epochs was Z as evidenced by ... I used an adam optimizer so that manually training the learning rate wasn't necessary.
+I used this training data for training the model. The validation set helped determine if the model was over or under fitting. The ideal number of epochs was 30 as evidenced by validation loss is not going lower than 0.0096 and is around 0.01. I used an adam optimizer so that manually training the learning rate wasn't necessary.
