@@ -87,11 +87,13 @@ The model was trained and validated on different data sets to ensure that the mo
 
 #### 3. Model parameter tuning
 
-The model used an adam optimizer, so the learning rate was not tuned manually (model.py line 25).
+The model used an adam optimizer, so the learning rate was not tuned manually (model.py line 216).
+
+model.compile(loss='mse', optimizer='adam')
 
 #### 4. Appropriate training data
 
-Training data was chosen to keep the vehicle driving on the road. I used a combination of center lane driving, reverse lane driving and focused turns driving data.
+Training data was chosen to keep the vehicle driving on the road with multiple laps i.e. clockwise, counter clockwise and focused sharp turn after bridges. Each type of those training data was chosen carefully to keep in in center of road with smooth steering.
 
 For details about how I created the training data, see the next section. 
 
@@ -99,29 +101,30 @@ For details about how I created the training data, see the next section.
 
 #### 1. Solution Design Approach
 
-The overall strategy for deriving a model architecture was to use Nvida Convnet and modify it to avoid overfitting.
+The overall strategy for deriving a model architecture was to use Nvidia Convnet and modify it to avoid overfitting.
 
-My first step was to use a convolution neural network model similar to the Convnet I thought this model might be appropriate because it was demonstrated nicely by Nvidia published here: https://devblogs.nvidia.com/parallelforall/deep-learning-self-driving-cars/
+My first step is to build the whole thing with simple network, i.e. one Neuron and try out the image preprocessing, save and load the model.h5. Once the simple network works even though it did not drive on center of lane, it gives all necessory components and flexibility to debug. 
 
-In order to gauge how well the model was working, I split my image and steering angle data into a training(80%) and validation set(20%). I found that my first model had a low mean squared error on the training set but a high mean squared error on the validation set. This implied that the model was overfitting. 
+Then take look at the appropriate neural network such as Nvidia Convnet. I thought this model might be appropriate because it was demonstrated nicely by Nvidia published here: https://devblogs.nvidia.com/parallelforall/deep-learning-self-driving-cars/
 
-To combat the overfitting, I modified the model to add the dropout layer at linecode at 195 and 199.
+In order to gauge how well the model was working, I split my image and steering angle data into a training(80%) and validation set(20%).  
 
-Then 
+To combat the overfitting, I modified the model to add the dropout layer at linecode at 195 and 199. Also did add the cropping image to focus the image information only on the road.
 
 The final step was to run the simulator to see how well the car was driving around track one. There were a few spots where the vehicle fell off the track i.e. few big turns:
 
-to improve the driving behavior in these cases, I added the reverse driving lap to capture the 
+[todo] to add images:
+
+to improve the driving behavior in these cases, I added the reverse driving lap to capture the driving data.
 
 At the end of the process, the vehicle is able to drive autonomously around the track without leaving the road.
 
-####2. Final Model Architecture
+#### 2. Final Model Architecture
 
-The final model architecture (model.py lines 18-24) consisted of a convolution neural network with the following layers and layer sizes ...
+The final model architecture (model.py lines 171-204) consisted of a convolution neural network with the following layers and layer sizes ...
 
-Here is a visualization of the architecture (note: visualizing the architecture is optional according to the project rubric)
 
-![alt text][image1]
+
 
 #### 3. Creation of the Training Set & Training Process
 
