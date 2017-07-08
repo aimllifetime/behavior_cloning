@@ -63,21 +63,18 @@ Examples
 
 using Nvida covnet architecture primarily but with some dropouts. The input image is normalized with lambda layer in input layer(code line 189) The model includes RELU layers to introduce nonlinearity
 
-|Codeline   | Model Layer            | Description    |
-|:----- |:-----------------|:---------------|
-|189 | First layer | using lambda to normalize the image |
-|190 | second layer| cropping the upper half image so only majority of road is only presented. |
-|191 | third layer | convolutional with 24 filters and filter 5x5, stride (2,2), activation of relu |
-|192 | fourth layer| convolutional with 36 filters and filter 5x5, stride (2,2), activation of relu |
-|194 | fifth layer | convolutional with 48 filters and filter 5x5, stride (2,2), activation of relu |
-|195 |             | Dropout probability 0.3 |
-|196 | sixth layer | convolutional with 64 filters and filter 5x5, stride (1,1), activation of relu |
-|197 | seventh layer| same as sixth layer |
-|198 | eighth layer| flatten layer |
-|199 |             | dropout probability 0.3 |
-|200 | ninth layer | densely connect layer of 100 |
-|202 | tenth layer | densely connect layer of 50 |
-|203 | last layer  | is output layer with one node. |
+| Description    |
+|:---------------|
+| convolutional with 24 filters and filter 5x5, stride (2,2), activation of relu |
+| convolutional with 36 filters and filter 5x5, stride (2,2), activation of relu |
+| convolutional with 48 filters and filter 5x5, stride (2,2), activation of relu |
+| Dropout probability 0.3 |
+| convolutional with 64 filters and filter 5x5, stride (1,1), activation of relu |
+| convolutional with 64 filters and filter 5x5, stride (1,1), activation of relu|
+| flatten layer |
+| densely connect layer of 100 |
+| densely connect layer of 50 |
+| is output layer with one node. |
 
 #### 2. Attempts to reduce overfitting in the model
 
@@ -109,7 +106,7 @@ Then take look at the appropriate neural network such as Nvidia Convnet. I thoug
 
 In order to gauge how well the model was working, I split my image and steering angle data into a training(80%) and validation set(20%).  
 
-To combat the overfitting, I modified the model to add the dropout layer at linecode at 195 and 199. Also did add the cropping image to focus the image information only on the road.
+To combat the overfitting, I modified the model to add lamdba normalization layer(code ), the dropout layer at linecode at 195 and 199. Also did cropping image to focus the image information only on the road.
 
 The final step was to run the simulator to see how well the car was driving around track one. There were a few spots where the vehicle fell off the track i.e. few big turns:
 
@@ -123,6 +120,21 @@ At the end of the process, the vehicle is able to drive autonomously around the 
 
 The final model architecture (model.py lines 171-204) consisted of a convolution neural network with the following layers and layer sizes ...
 
+|Codeline   | Model Layer            | Description    |
+|:----- |:-----------------|:---------------|
+|189 | First layer | using lambda to normalize the image |
+|190 | second layer| cropping the upper half image so only majority of road is only presented. |
+|191 | third layer | convolutional with 24 filters and filter 5x5, stride (2,2), activation of relu |
+|192 | fourth layer| convolutional with 36 filters and filter 5x5, stride (2,2), activation of relu |
+|194 | fifth layer | convolutional with 48 filters and filter 5x5, stride (2,2), activation of relu |
+|195 |             | Dropout probability 0.3 |
+|196 | sixth layer | convolutional with 64 filters and filter 5x5, stride (1,1), activation of relu |
+|197 | seventh layer| same as sixth layer |
+|198 | eighth layer| flatten layer |
+|199 |             | dropout probability 0.3 |
+|200 | ninth layer | densely connect layer of 100 |
+|202 | tenth layer | densely connect layer of 50 |
+|203 | last layer  | is output layer with one node. |
 
 
 
