@@ -158,9 +158,12 @@ To augment the data sat, I also flipped images and angles thinking that this wou
 ![alt text](./jpegs/center_2017_06_24_12_27_38_238_flipped.jpg)
 
 
-After the collection process of three following collecting data sets, I had 3965 number of data points. 
+After the collection process of three following collecting data sets, I had 3965 number of data points.
+
 ./my_data              <= complete lap of driving on center of road.
+
 ./turn1_after_bridge   <= only collect the failing or challenging turns that drives off road
+
 ./revs_1               <= complete lap of reversing driving
 
 I then preprocessed this data by deciding percentage of zero measurement image, i.e. 1.0 which mean to use all images. This can be changed later. Also added the side cameras from both left and right cameras. At the end I have 15852 images.
