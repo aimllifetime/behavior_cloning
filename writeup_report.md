@@ -40,7 +40,7 @@ python drive.py model.h5
 
 #### 3. Submission code is usable and readable
 
-The model.py file contains the code for training and saving the convolution neural network. It also accepts a command line argument to take trained model from privious run. In this way, we can continously train neural network with newly captured data. User can define how many epochs in each run. Also user can have a way to reduce the repetitive image with zero measurement by defining a percentage. The file shows the pipeline I used for training and validating the model, and it contains comments to explain how the code works
+The model.py file contains the code for training and saving the convolution neural network. It also accepts a command argument to take trained model from privious run. In this way, we can continously train neural network with newly captured data. User can define how many epochs in each run. Also user can have a way to reduce the repetitive image with zero measurement by defining a percentage. The file shows the pipeline I used for training and validating the model, and it contains comments to explain how the code works
 
 ![command](./jpegs/commandline.png)
 
@@ -61,7 +61,7 @@ Examples
 
 #### 1. An appropriate model architecture has been employed
 
-using Nvida covnet architecture primarily but with some dropouts. The input image is normalized with lambda layer in input layer(code line 189) The model includes RELU layers to introduce nonlinearity
+using Nvida covnet architecture primarily but with some dropouts. The input image is normalized with lambda layer in input layer(code line 192) The model includes RELU layers to introduce nonlinearity
 
 | Description    |
 |:---------------|
@@ -78,13 +78,13 @@ using Nvida covnet architecture primarily but with some dropouts. The input imag
 
 #### 2. Attempts to reduce overfitting in the model
 
-The model contains dropout layers in order to reduce overfitting (model.py lines 195 and line 199). 
+The model contains dropout layers in order to reduce overfitting (model.py lines 198 and line 202). 
 
 The model was trained and validated on different data sets to ensure that the model was not overfitting. How to collect or generate augumented data set will be explained later. The model was tested by running it through the simulator and ensuring that the vehicle could stay on the track.
 
 #### 3. Model parameter tuning
 
-The model used an adam optimizer, so the learning rate was not tuned manually (model.py line 216).
+The model used an adam optimizer, so the learning rate was not tuned manually (model.py line 220).
 
 model.compile(loss='mse', optimizer='adam')
 
@@ -106,7 +106,7 @@ Then take look at the appropriate neural network such as Nvidia Convnet. I thoug
 
 In order to gauge how well the model was working, I split my image and steering angle data into a training(80%) and validation set(20%).  
 
-To combat the overfitting, I modified the model to add lamdba normalization layer(code ), the dropout layer at linecode at 195 and 199. Also did cropping image to focus the image information only on the road.
+To combat the overfitting, I modified the model to add lamdba normalization layer(code ), the dropout layer at line code at 198 and 202. Also did cropping image to focus the image information only on the road.
 
 The final step was to run the simulator to see how well the car was driving around track one. There were a few spots where the vehicle fell off the track i.e. few big turns:
 
@@ -118,23 +118,23 @@ At the end of the process, the vehicle is able to drive autonomously around the 
 
 #### 2. Final Model Architecture
 
-The final model architecture (model.py lines 171-204) consisted of a convolution neural network with the following layers and layer sizes ...
+The final model architecture (model.py lines 174-207) consisted of a convolution neural network with the following layers and layer sizes ...
 
 |Codeline   | Model Layer            | Description    |
 |:----- |:-----------------|:---------------|
-|189 | First layer | using lambda to normalize the image |
-|190 | second layer| cropping the upper half image so only majority of road is only presented. |
-|191 | third layer | convolutional with 24 filters and filter 5x5, stride (2,2), activation of relu |
-|192 | fourth layer| convolutional with 36 filters and filter 5x5, stride (2,2), activation of relu |
-|194 | fifth layer | convolutional with 48 filters and filter 5x5, stride (2,2), activation of relu |
-|195 |             | Dropout probability 0.3 |
-|196 | sixth layer | convolutional with 64 filters and filter 5x5, stride (1,1), activation of relu |
-|197 | seventh layer| same as sixth layer |
-|198 | eighth layer| flatten layer |
-|199 |             | dropout probability 0.3 |
-|200 | ninth layer | densely connect layer of 100 |
-|202 | tenth layer | densely connect layer of 50 |
-|203 | last layer  | is output layer with one node. |
+|192 | First layer | using lambda to normalize the image |
+|193 | second layer| cropping the upper half image so only majority of road is only presented. |
+|194 | third layer | convolutional with 24 filters and filter 5x5, stride (2,2), activation of relu |
+|195 | fourth layer| convolutional with 36 filters and filter 5x5, stride (2,2), activation of relu |
+|196 | fifth layer | convolutional with 48 filters and filter 5x5, stride (2,2), activation of relu |
+|198 |             | Dropout probability 0.3 |
+|199 | sixth layer | convolutional with 64 filters and filter 5x5, stride (1,1), activation of relu |
+|200 | seventh layer| same as sixth layer |
+|201 | eighth layer| flatten layer |
+|202 |             | dropout probability 0.3 |
+|203 | ninth layer | densely connect layer of 100 |
+|205 | tenth layer | densely connect layer of 50 |
+|206 | last layer  | is output layer with one node. |
 
 
 
