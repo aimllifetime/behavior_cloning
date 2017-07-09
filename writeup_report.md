@@ -167,19 +167,31 @@ I finally randomly shuffled the data set and put Y% of the data into a validatio
 I used this training data for training the model. The validation set helped determine if the model was over or under fitting. The ideal number of epochs was 30 as evidenced by validation loss is not going lower than 0.0096 and is around 0.01. I used an adam optimizer so that manually training the learning rate wasn't necessary.
 
 #################################################################
+
 Following is snapshot of image process examples:
 
 (carnd-term1) big-iMac:behavior_cloning dad$ python model.py -d "./my_data;./turn1_after_bridge;./revs_1" -p 1
+
 Using TensorFlow backend.
+
 Namespace(dir='./my_data;./turn1_after_bridge;./revs_1', epoch=50, md5=None, percentage=1.0)
+
 before add the side camera. found following entried in csv. 
 
 ./my_data/driving_log.csv
+
 ./turn1_after_bridge/driving_log.csv
+
 ./revs_1/driving_log.csv
+
 total entries in ['./my_data', './turn1_after_bridge', './revs_1'] is **3965** 
+
 after preprocess, following is picking up image with defined percetage of zero measurement 
+
 total entries of **non-zero measurements is 2992** 
+
 total entries of **zero measurements is 973** 
+
 total entries after select 1.0 zero measurements is 3965 
+
 after adding flipped image and side cameras, here is **total number of images: 15852** 
