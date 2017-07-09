@@ -142,18 +142,20 @@ The final model architecture (model.py lines 171-204) consisted of a convolution
 
 To capture good driving behavior, I tried multiple times to make sure I can steer the car on the center road with smooth steering. When my mouse moving is much smooth, then I recorded couple of laps that seems good at turns. One out of them is picked for training purpose. Here is one example of counter clock wise driving:
 
-![alt text][image2]
+![alt text](./jpegs/center_2017_06_26_18_41_27_087.jpg)
+
 
 I then recorded the vehicle in clock wise driving which is reverse direction compared to the default driving direction. Similarily, I did multiple driving and recorded multiple training data. Then I picked one for the training purpose with smoothest steering. Here is clock wise driving.
 
-![alt text][image3]
+![alt text](./jpegs/center_2017_06_24_12_27_38_238.jpg)
 
 Often I found the model gets off track on sharp turn or the road side does not have clear line. I captured multiple data set only relates to those failing turn and training them.
 
 To augment the data sat, I also flipped images and angles thinking that this would help generalize the model. For example, here is an image that has then been flipped:
 
-![alt text][image6]
-![alt text][image7]
+![alt text](./jpegs/center_2017_06_26_18_41_27_087_flipped.jpg)
+
+![alt text](./jpegs/center_2017_06_24_12_27_38_238_flipped.jpg)
 
 
 After the collection process, I had X number of data points. I then preprocessed this data by ...
@@ -161,4 +163,4 @@ After the collection process, I had X number of data points. I then preprocessed
 
 I finally randomly shuffled the data set and put Y% of the data into a validation set. 
 
-I used this training data for training the model. The validation set helped determine if the model was over or under fitting. The ideal number of epochs was Z as evidenced by ... I used an adam optimizer so that manually training the learning rate wasn't necessary.
+I used this training data for training the model. The validation set helped determine if the model was over or under fitting. The ideal number of epochs was 30 as evidenced by validation loss is not going lower than 0.0096 and is around 0.01. I used an adam optimizer so that manually training the learning rate wasn't necessary.
