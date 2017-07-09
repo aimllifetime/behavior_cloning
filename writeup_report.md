@@ -158,13 +158,38 @@ To augment the data sat, I also flipped images and angles thinking that this wou
 ![alt text](./jpegs/center_2017_06_24_12_27_38_238_flipped.jpg)
 
 
-After the collection process, I had X number of data points. I then preprocessed this data by ...
+After the collection process of three following collecting data sets, I had 3965 number of data points. 
+./my_data              <= complete lap of driving on center of road.
+./turn1_after_bridge   <= only collect the failing or challenging turns that drives off road
+./revs_1               <= complete lap of reversing driving
 
+I then preprocessed this data by deciding percentage of zero measurement image, i.e. 1.0 which mean to use all images. This can be changed later. Also added the side cameras from both left and right cameras. At the end I have 15852 images.
+I tweaked the measurements for the right camera image by less measurement compared to left camera since it seems drives to left by default.
 
-
-I finally randomly shuffled the data set and put Y% of the data into a validation set. 
+I finally randomly shuffled the data set and put 20% of the data into a validation set. 
 
 I used this training data for training the model. The validation set helped determine if the model was over or under fitting. The ideal number of epochs was 30 as evidenced by validation loss is not going lower than 0.0096 and is around 0.01. I used an adam optimizer so that manually training the learning rate wasn't necessary.
+
+Here is the list of things I modified during training:
+
+1. adjust measurement of right camera
+2. added drop layer in Covnet, and change the probability.
+3. change the percentage of zero measurement
+4. captured more failing turns
+5. use reverse lap
+6. use both left and right side cameras
+7. change the epoch to run more than 30 on AWS.
+8. repeat the above process
+9. reload each time the model.h5 for next step training so it is incremental.
+10. combine several capture data set into one training, i.e. defined by -d "./my_data;./turn1_after_bridge;./revs_1"
+
+following are example of repetitive training steps, in between those steps, will adjust the parameters in CNN and measurement adjustments.
+
+1. python model.py -d "./my_data" -p 1.0 -e 30               <= use all image in my_data dir, epoch = 30
+2. python model.py -m model.h5 -d "./revs_1" -p 0.3 -e 30    <= use all images of non-zero measurement and 30% of zero measurement. load previoused stored model.h5. epoch = 30
+3. python model.py -m model.h5 -d "./turn1_after_bridge" -p 0.3 -e 30    <= same as step 2, but use failing turn data.
+4. python model.py -m model.h5 -d "./turn2;./turn3;./turn4" -p 0.3 -e 30 <= using failing turns.
+5. python model.py -m model.h5 -d "./lap1;./lap2;./lap3" -p 0.3 -e 30    <= use new lap data
 
 #################################################################
 
