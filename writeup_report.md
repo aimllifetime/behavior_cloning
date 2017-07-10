@@ -171,6 +171,11 @@ After the collection process of three following collecting data sets, I had 3965
 I then preprocessed this data by deciding percentage of zero measurement image, i.e. 1.0 which mean to use all images. This can be changed later. Also added the side cameras from both left and right cameras. At the end I have 15852 images.
 I tweaked the measurements for the right camera image by less measurement compared to left camera since it seems drives to left by default.
 
+following is the example of plot of histogram before and after of using 20% of zero steering angle.
+
+![before](./jpegs/raw_steering_distribution.png)
+![after](./jpegs/reduced_zero_steering_hist.png)
+
 I finally randomly shuffled the data set and put 20% of the data into a validation set. 
 
 I used this training data for training the model. The validation set helped determine if the model was over or under fitting. The ideal number of epochs was 30 as evidenced by validation loss is not going lower than 0.0096 and is around 0.01. I used an adam optimizer so that manually training the learning rate wasn't necessary.
