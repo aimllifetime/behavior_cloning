@@ -110,7 +110,9 @@ To combat the overfitting, I modified the model to add lamdba normalization laye
 
 The final step was to run the simulator to see how well the car was driving around track one. There were a few spots where the vehicle fell off the track i.e. few big turns:
 
-![turn1](./jpegs/off_track_turn1.jp)![turn1](./jpegs/off_track_turn2.jp)![turn1](./jpegs/off_track_turn3.jp)
+![turn1](./jpegs/off_track_turn1.jpg)
+![turn2](./jpegs/off_track_turn2.jpg)
+![turn3](./jpegs/off_track_turn3.jpg)
 
 to improve the driving behavior in these cases, I added the reverse driving lap to capture the driving data.
 
