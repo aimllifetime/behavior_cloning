@@ -4,8 +4,10 @@ import numpy as np
 import tensorflow as tf
 import sys
 import os
+import matplotlib.pyplot as plt
 
 from keras.models import load_model
+
 # update Keras to latest version 2.0.1: pip install keras --upgrade
 
 # add command line processing to read in the IMG and previously trained hd5 file
@@ -19,7 +21,7 @@ parser.add_argument('-d','--dir', required=True, help='IMG dir where data is col
 parser.add_argument('-m', '--md5', help='Previously trained model is used. if this is blank, training starts from stratch')
 parser.add_argument('-p', '--percentage', type=float, default='0.3', help='percentage of repeative image that has measurement of 0')
 parser.add_argument('-e', '--epoch', type=int, default='50', help='number of epochs to run')
-parser.add_argument('-b', '--batch_size', type=int, default='32', help='batch size used in epoch')
+parser.add_argument('-b', '--batch_size', type=int, default='128', help='batch size used in epoch')
 args = parser.parse_args()
 
 print(args)
@@ -70,25 +72,36 @@ def reduce_similar_image(lines):
     """
     l_processed_lines = []
     repeat_line_0 = [];
-
+    measure_in = []
+    measure_reduced = []
     for line in lines:
+        measure_in.append(float(line[3]))
         if(float(line[3]) != 0.0):
             l_processed_lines.append(line)
+            measure_reduced.append(float(line[3]))
         else :
             repeat_line_0.append(line)
 
     print('total entries of non-zero measurements is {} '.format(len(l_processed_lines)))
-    print('total entries of zero measurements is {} '.format(len(repeat_line_0)))
-
 
     # randomly append only 30% of repeat_line_0
     selection_number = int(len(repeat_line_0) * args.percentage)
+    print('total entries of zero measurements is {}, {} will be randomly selected'.format(len(repeat_line_0), selection_number))
     random.shuffle(repeat_line_0)
 
     for index in range(selection_number):
         l_processed_lines.append(repeat_line_0[index])
+        measure_reduced.append(0.0)
 
     print('total entries after select {} zero measurements is {} '.format(args.percentage, len(l_processed_lines)))
+    #print(measure_in)
+    #plot the graph before and after
+    # plt.hist(np.array(measure_in), bins=100)
+    # plt.title("raw image data with steering data: zero-measurement is spike")
+    # plt.show()
+    # plt.hist(np.array(measure_reduced), bins=100)
+    # plt.title("reduced images of zero-measurement")
+    # plt.show()
     return l_processed_lines
 
 
@@ -105,6 +118,7 @@ if (args.dir):
     print("after preprocess, following is picking up image with defined percetage of zero measurement \n")
     lines = reduce_similar_image(lines)
 
+#sys.exit()
 #print(lines)
 if(len(lines) == 0):
     print("does not find any right image files")
@@ -171,6 +185,13 @@ def generator(lines, batch_size=128):
 train_generator = generator(train_samples, batch_size = args.batch_size)
 validation_generator  = generator(validation_samples, batch_size = args.batch_size)
 
+
+# sample 3 batches from the generator
+# for i in range(3):
+#     x_batch, y_batch = next(train_generator)
+#     print(x_batch.shape, y_batch.shape)
+
+
 import cv2
 import math
 import numpy as np
@@ -234,8 +255,10 @@ else:
 model.compile(loss='mse', optimizer='adam')
 #model.fit(X_train, y_train, validation_split = 0.2, shuffle= True, nb_epoch=args.epoch)
 
-
-model.fit_generator(train_generator, steps_per_epoch = len(train_samples)/args.batch_size,
+import math
+batch_gen = math.ceil(len(train_samples) * 4 / args.batch_size)
+print("batch_gen size {}".format(batch_gen))
+model.fit_generator(train_generator, steps_per_epoch = batch_gen,
                     validation_data = validation_generator,
                     validation_steps = len(validation_samples), epochs = args.epoch,
                     verbose=1)
