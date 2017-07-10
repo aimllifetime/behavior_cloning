@@ -55,6 +55,7 @@ def pre_process_csv(dirs):
                         line[2] = df + '/IMG/' + filename
                         #print(line)
                         l_lines.append(line)
+    print('total entries in {} is {} '.format(dirs, len(l_lines))) 
     return l_lines
 
 
@@ -76,17 +77,18 @@ def reduce_similar_image(lines):
         else :
             repeat_line_0.append(line)
 
-    print(len(l_processed_lines))
+    print('total entries of non-zero measurements is {} '.format(len(l_processed_lines)))
+    print('total entries of zero measurements is {} '.format(len(repeat_line_0)))
 
-    #print(len(lines))
 
     # randomly append only 30% of repeat_line_0
+    selection_number = int(len(repeat_line_0) * args.percentage)
     random.shuffle(repeat_line_0)
-    print(len(repeat_line_0))
-    for index in range(int(len(repeat_line_0) * args.percentage)):
+    
+    for index in range(selection_number):
         l_processed_lines.append(repeat_line_0[index])
 
-    print(len(l_processed_lines))
+    print('total entries after select {} zero measurements is {} '.format(args.percentage, len(l_processed_lines)))
     return l_processed_lines
 
 
@@ -98,14 +100,16 @@ dirs = []
 if (args.dir):
     dirs = args.dir.split(";")
     #print (dirs)
-
+    print("before add the side camera. found following entried in csv. \n")
     lines = pre_process_csv(dirs)
+    print("after preprocess, following is picking up image with defined percetage of zero measurement \n")
     lines = reduce_similar_image(lines)
 
 #print(lines)
 if(len(lines) == 0):
     print("does not find any right image files")
     sys.exit()
+
 
 
 images = []  # stores all images read them from pre-processed csv file. This also
@@ -119,7 +123,7 @@ for line in lines[1:-1]:
     left_current_path   = line[1]
     right_current_path  = line[2]
 
-    print(center_current_path)
+    #print(center_current_path)
     # read in the three image for center, left and right.
     image = cv2.imread(center_current_path)
     image_left = cv2.imread(left_current_path)
@@ -158,8 +162,7 @@ from keras.layers import Cropping2D
 X_train = np.array(images)
 y_train = np.array(measurements)
 
-print(len(X_train))
-print(len(y_train))
+print("after adding flipped image and side cameras, here is total number of images: {} ".format(len(X_train)))
 
 from keras.models import Sequential
 from keras.layers import Flatten, Dense, Lambda
