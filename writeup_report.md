@@ -110,7 +110,9 @@ To combat the overfitting, I modified the model to add lamdba normalization laye
 
 The final step was to run the simulator to see how well the car was driving around track one. There were a few spots where the vehicle fell off the track i.e. few big turns:
 
-[todo] to add images:
+![turn1](./jpegs/off_track_turn1.jpg)
+![turn2](./jpegs/off_track_turn2.jpg)
+![turn3](./jpegs/off_track_turn3.jpg)
 
 to improve the driving behavior in these cases, I added the reverse driving lap to capture the driving data.
 
@@ -168,6 +170,11 @@ After the collection process of three following collecting data sets, I had 3965
 
 I then preprocessed this data by deciding percentage of zero measurement image, i.e. 1.0 which mean to use all images. This can be changed later. Also added the side cameras from both left and right cameras. At the end I have 15852 images.
 I tweaked the measurements for the right camera image by less measurement compared to left camera since it seems drives to left by default.
+
+following is the example of plot of histogram before and after of using 20% of zero steering angle.
+
+![before](./jpegs/raw_steering_distribution.png)
+![after](./jpegs/reduced_zero_steering_hist.png)
 
 I finally randomly shuffled the data set and put 20% of the data into a validation set. 
 
