@@ -27,10 +27,11 @@ Here I will consider the [rubric points](https://review.udacity.com/#!/rubrics/4
 #### 1. Submission includes all required files and can be used to run the simulator in autonomous mode
 
 My project includes the following files:
-* model.py containing the script to create and train the model using fit_generator. **The data feeds into training using the python generator instead of storing all data into memory.** This is key difference from last submission.
-* drive.py for driving the car in autonomous mode. did not change from original version.
-* model.h5 containing a trained convolution neural network 
-* writeup_report.md summarizing the results
+* **model.py** containing the script to create and train the model using fit_generator. **The data feeds into training using the python generator instead of storing all data into memory.** This is key difference from last submission.
+* **drive.py** for driving the car in autonomous mode. did not change from original version.
+* **model.h5** containing a trained convolution neural network. new file from last time. Created through generator training.
+* **writeup_report.md** summarizing the results
+* **video.mp4** A record of autonomous drive
 
 #### 2. Submission includes functional code
 Using the Udacity provided simulator and my drive.py file, the car can be driven autonomously around the track by executing 
