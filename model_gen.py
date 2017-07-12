@@ -165,7 +165,7 @@ def generator(lines, batch_size=128):
                 measurements.append(measurement_flipped)
                 # adding the left side camera image. adding the measurement offset 0.15
                 # append the image and measurement to storage
-                correction = 0.15
+                correction = 0.25
                 steering_left = measurement + correction
                 images.append(image_left)
                 measurements.append(steering_left)
@@ -173,7 +173,7 @@ def generator(lines, batch_size=128):
                 # add a bit less offset to the right image because the car seems drive more
                 # toward to right side of road.
                 # append the image and measurement to storage
-                steering_right = measurement - correction - 0.02
+                steering_right = measurement - correction - 0.01
                 images.append(image_right)
                 measurements.append(steering_right)
 
@@ -230,11 +230,11 @@ def model_nvda_covnet(row, col, ch):
     model.add(Conv2D(36,(5,5),strides=(2,2),activation='relu'))
     #model.add(MaxPooling2D(pool_size=(2,2))) #added
     model.add(Conv2D(48,(5,5),strides=(2,2),activation='relu'))
-    model.add(Dropout(0.3))
+    model.add(Dropout(0.5))
     model.add(Conv2D(64,(3,3),activation='relu'))
     model.add(Conv2D(64,(3,3),activation='relu'))
     model.add(Flatten())
-    model.add(Dropout(0.3))
+    model.add(Dropout(0.5))
     model.add(Dense(100))
     #model.add(Dropout(0.5)) cause local round turn.
     model.add(Dense(50))
@@ -256,11 +256,12 @@ model.compile(loss='mse', optimizer='adam')
 #model.fit(X_train, y_train, validation_split = 0.2, shuffle= True, nb_epoch=args.epoch)
 
 import math
-batch_gen = math.ceil(len(train_samples) * 4 / args.batch_size)
-print("batch_gen size {}".format(batch_gen))
-model.fit_generator(train_generator, steps_per_epoch = batch_gen,
+train_batch_gen = math.ceil(len(train_samples) * 4 / args.batch_size)
+validate_batch_gen = math.ceil(len(validation_samples) * 4 / args.batch_size)
+print("train_batch_gen size: {}; validate_batch_gen size {}".format(train_batch_gen, validate_batch_gen))
+model.fit_generator(train_generator, steps_per_epoch = train_batch_gen,
                     validation_data = validation_generator,
-                    validation_steps = len(validation_samples), epochs = args.epoch,
+                    validation_steps = validate_batch_gen, epochs = args.epoch,
                     verbose=1)
 
 model.save('model.h5')
